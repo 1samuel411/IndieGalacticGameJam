@@ -167,9 +167,7 @@ namespace SNetwork.Client
                     byte[] customCode = new byte[2];
                     customCode[0] = dataByte[3];
                     customCode[1] = dataByte[4];
-
-                    Logging.CreateLog("Hello");
-
+                    
                     ResponseManager.instance.HandleResponse(dataByte.Skip(5).Take(BitConverter.ToInt16(customCode, 0)).ToArray(), Convert.ToInt32(dataByte[0]), Convert.ToInt32(dataByte[1]), 0, clientSocket, id);
                 }
                 yield return null;

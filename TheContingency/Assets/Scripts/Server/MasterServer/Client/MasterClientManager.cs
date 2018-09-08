@@ -187,9 +187,18 @@ public class MasterClientManager : MonoBehaviour
         }
     }
 
-
     public void SendNetworkUser(MasterNetworkPlayer player)
     {
         MasterMessaging.instance.SendMasterNetworkPlayer(player, 2, _client.ourId, 0, _client.clientSocket);
+    }
+
+    public void JoinRoom(int id)
+    {
+        MasterMessaging.instance.SendJoinRoom(id, _client);
+    }
+
+    public void CreateRoom()
+    {
+        MasterMessaging.instance.SendCreateRoom(_client);
     }
 }

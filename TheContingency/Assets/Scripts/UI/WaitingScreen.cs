@@ -2,19 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ServerTest : MonoBehaviour
+public class WaitingScreen : MonoBehaviour
 {
 
-    public string ip;
-    public int port;
-
-
+    // Use this for initialization
     void Start()
     {
-        MasterClientManager.instance.Connect(ip, port);
 
     }
 
+    // Update is called once per frame
     void Update()
     {
 

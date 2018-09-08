@@ -73,7 +73,14 @@ namespace SNetwork.Server
 
                 Thread.Sleep((int) (500));
 
-				
+				// Send rooms to users
+                for(int i = 0; i < rooms.Count; i++)
+                {
+                    for(int x = 0; x < rooms[i].usersInRoomIds.Count; x++)
+                    {
+                        Messaging.instance.SendRoom(rooms[i], rooms[i].usersInRoomIds[x], clientSockets);
+                    }
+                }
             }
         }
 
@@ -226,6 +233,7 @@ namespace SNetwork.Server
 
         public void RemoveSocket(Socket socket)
         {
+
             var socketRetrieved = clientSockets.FirstOrDefault(t => t.Key == socket);
             try
             {
@@ -244,6 +252,11 @@ namespace SNetwork.Server
 
             }
 
+            Room room = GetRoom(clientSockets[socket].id);
+            if (room != null)
+            {
+                DeleteRoom(room.roomId);
+            }
             clientSockets.Remove(socket);
         }
 
@@ -251,6 +264,43 @@ namespace SNetwork.Server
         {
             var socket = (Socket)AR.AsyncState;
             socket.EndSend(AR);
+        }
+
+        public void JoinRoom(Socket fromUser, string idToJoin)
+        {
+            Room roomToJoin = rooms.FirstOrDefault(x => x.roomId == idToJoin);
+
+            if(roomToJoin != null)
+            {
+                roomToJoin.usersInRoomIds.Add(clientSockets[fromUser].id);
+                roomToJoin.Refresh();
+            }
+        }
+
+        private Random random = new Random();
+        public void CreateRoom(Socket fromSocket)
+        {
+            MasterNetworkPlayer masterNetworkPlayer = clientSockets[fromSocket];
+
+            Room room = new Room(masterNetworkPlayer.id);
+            room.roomId = random.Next(0, 9) + random.Next(0, 9) + random.Next(0, 9) + random.Next(0, 9).ToString();
+
+            rooms.Add(room);
+        }
+
+        private Room GetRoom(int userId)
+        {
+            return rooms.FirstOrDefault(x => x.usersInRoomIds.Contains(userId) == true);
+        }
+
+        private void DeleteRoom(string roomId)
+        {
+            Room roomToRemove = rooms.FirstOrDefault(x => x.roomId == roomId);
+
+            if(roomToRemove != null)
+            {
+                rooms.Remove(roomToRemove);
+            }
         }
     }
 }

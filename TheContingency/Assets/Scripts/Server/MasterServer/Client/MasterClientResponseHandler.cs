@@ -27,6 +27,8 @@ namespace SNetwork.Client
             ResponseManager.instance.AddServerResponse(Response7, 7);
             ResponseManager.instance.AddServerResponse(Response9, 9);
             ResponseManager.instance.AddServerResponse(Response14, 14);
+
+            ResponseManager.instance.AddServerResponse(Response70, 70);
         }
 
         public void Response1(byte[] responseBytes, Socket fromSocket, int fromId)
@@ -64,6 +66,12 @@ namespace SNetwork.Client
         public void Response14(byte[] responseBytes, Socket fromSocket, int fromId)
         {
             _client.networkPlayers = ByteParser.ConvertToNetworkPlayers(responseBytes);
+        }
+
+        public void Response70(byte[] responseBytes, Socket fromSocket, int fromId)
+        {
+            _client.room = ByteParser.ConvertDataToRoom(responseBytes);
+            Logging.CreateLog("Recieved Room: " + _client.room.roomId);
         }
     }
 }

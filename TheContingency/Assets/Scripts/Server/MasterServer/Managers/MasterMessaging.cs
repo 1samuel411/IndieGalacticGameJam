@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SNetwork.Client;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,7 +23,21 @@ namespace SNetwork
                 return _instance;
             }
         }
-        
+
+        // Header: 52
+        public void SendCreateRoom(MasterClient client)
+        {
+            byte[] data = ByteParser.ConvertASCIIToBytes("");
+            SendFinal(data, 52, 2, client.ourId, 0, client.clientSocket);
+        }
+
+        // Header: 51
+        public void SendJoinRoom(int id, MasterClient client)
+        {
+            byte[] data = ByteParser.ConvertASCIIToBytes(id.ToString());
+            SendFinal(data, 51, 2, client.ourId, 0, client.clientSocket);
+        }
+
         // Header: 50
         public void SendMasterNetworkPlayer(MasterNetworkPlayer player, int sendCode, int fromCode, int customCode,
             Socket sockets)

@@ -24,6 +24,9 @@ namespace SNetwork.Server
             ResponseManager.instance.AddServerResponse(Response2, 2);
 
             ResponseManager.instance.AddServerResponse(Response50, 50);
+
+            ResponseManager.instance.AddServerResponse(Response51, 51);
+            ResponseManager.instance.AddServerResponse(Response52, 52);
         }
 
         public void Response21(byte[] responseBytes, Socket fromSocket, int fromId)
@@ -62,9 +65,23 @@ namespace SNetwork.Server
             _server.clientSockets[fromSocket] = masterNetworkPlayer;
             _server.clientSockets[fromSocket].id = fromId;
 
-            
+
 
             Console.WriteLine("Users info: " + _server.clientSockets[fromSocket].id + ", " + _server.clientSockets[fromSocket].username);
         }
+
+        public void Response51(byte[] responseBytes, Socket fromSocket, int fromId)
+        {
+            Console.WriteLine("Recieved a 51: " + fromId + ": " + responseBytes.Length);
+            int idToJoin = int.Parse(ByteParser.ConvertToASCII(responseBytes));
+            _server.JoinRoom(fromSocket, idToJoin.ToString());
+        }
+
+        public void Response52(byte[] responseBytes, Socket fromSocket, int fromId)
+        {
+            Console.WriteLine("Recieved a 52: " + fromId + ": " + responseBytes.Length);
+            _server.CreateRoom(fromSocket);
+        }
+
     }
 }
