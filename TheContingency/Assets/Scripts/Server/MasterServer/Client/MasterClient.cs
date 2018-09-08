@@ -9,7 +9,6 @@ using System.IO;
 using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 using SNetwork;
-using PirateGame.Managers;
 
 namespace SNetwork.Client
 {
@@ -25,17 +24,13 @@ namespace SNetwork.Client
         public int ourId = 0;
 
         public Room room;
-        public Invite[] invites;
         public MasterNetworkPlayer[] networkPlayers;
         public KeyValuePairs[] serverData;
-        public Match match;
         
         private bool updating;
 
         public int port;
         public string ip;
-
-        public MasterClientSettingsScriptableObject clientSettings;
 
         public void Connect(string ip = "127.0.0.1", int port = 100, Action<ResponseMessage> Callback = null, Action CallbackClosed = null)
         {
@@ -71,7 +66,7 @@ namespace SNetwork.Client
             {
                 failed = false;
 
-                if (attempts >= clientSettings.maxConnAttempts)
+                if (attempts >= 5)
                 {
                     Logging.CreateLog("[SNetworking] Exceeded Attempts! Canceling connection");
                     break;
@@ -87,11 +82,11 @@ namespace SNetwork.Client
                 catch (SocketException)
                 {
                     failed = true;
-                    Logging.CreateLog("[SNetworking] Failed attempts: " + attempts.ToString() + ". Connecting in " + (clientSettings.retryTime) + " s.");
+                    Logging.CreateLog("[SNetworking] Failed attempts: " + attempts.ToString() + ". Connecting in " + "1" + " s.");
                 }
 
                 if (failed)
-                    yield return new WaitForSeconds((clientSettings.retryTime) * 0.001f);
+                    yield return new WaitForSeconds(1f);
 
                 yield return null;
             }
@@ -173,10 +168,7 @@ namespace SNetwork.Client
                     customCode[0] = dataByte[3];
                     customCode[1] = dataByte[4];
 
-                    if (UIManager.instance)
-                    {
-                        UIManager.instance.RecieveMasterServerCall();
-                    }
+                    Logging.CreateLog("Hello");
 
                     ResponseManager.instance.HandleResponse(dataByte.Skip(5).Take(BitConverter.ToInt16(customCode, 0)).ToArray(), Convert.ToInt32(dataByte[0]), Convert.ToInt32(dataByte[1]), 0, clientSocket, id);
                 }

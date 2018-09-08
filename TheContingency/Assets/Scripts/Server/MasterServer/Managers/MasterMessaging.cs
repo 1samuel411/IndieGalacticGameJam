@@ -22,69 +22,7 @@ namespace SNetwork
                 return _instance;
             }
         }
-
-        // Header: 90
-        public void SendNewPlayMode(int playMode, int sendCode, int fromCode, int customCode,
-            Socket sockets)
-        {
-            byte[] data = ByteParser.ConvertASCIIToBytes(playMode.ToString());
-            SendFinal(data, 90, sendCode, fromCode, customCode, sockets);
-        }
-
-        // Header: 77
-        public void SendMatchMakeLeave(int sendCode, int fromCode, int customCode,
-            Socket sockets)
-        {
-            // Send Match make Leave
-            byte[] data = ByteParser.ConvertASCIIToBytes("a");
-            SendFinal(data, 77, sendCode, fromCode, 0, sockets);
-        }
-
-        // Header: 76
-        public void SendMatchMake(int sendCode, int fromCode, int customCode,
-            Socket sockets)
-        {
-            // Send Matchmake
-            byte[] data = ByteParser.ConvertASCIIToBytes("a");
-            SendFinal(data, 76, sendCode, fromCode, 0, sockets);
-        }
-
-        // Header: 75
-        public void SendLeave(int sendCode, int fromCode, int customCode,
-            Socket sockets)
-        {
-            // Send Leave
-            byte[] data = ByteParser.ConvertASCIIToBytes("a");
-            SendFinal(data, 75, sendCode, fromCode, 0, sockets);
-        }
-
-        // Header: 74
-        public void SendDecline(int inviteId, int sendCode, int fromCode, int customCode,
-            Socket sockets)
-        {
-            // Send inviteId
-            byte[] data = ByteParser.ConvertASCIIToBytes(inviteId.ToString());
-            SendFinal(data, 74, sendCode, fromCode, 0, sockets);
-        }
-
-        // Header: 73
-        public void SendAccept(int inviteId, int sendCode, int fromCode, int customCode,
-            Socket sockets)
-        {
-            // Send inviteId
-            byte[] data = ByteParser.ConvertASCIIToBytes(inviteId.ToString());
-            SendFinal(data, 73, sendCode, fromCode, 0, sockets);
-        }
-
-        // Header: 72
-        public void SendInvite(string playFabId, int sendCode, int fromCode, int customCode,
-            Socket sockets)
-        {
-            // Send playfabid
-            byte[] data = ByteParser.ConvertASCIIToBytes(playFabId);
-            SendFinal(data, 72, sendCode, fromCode, 0, sockets);
-        }
-
+        
         // Header: 50
         public void SendMasterNetworkPlayer(MasterNetworkPlayer player, int sendCode, int fromCode, int customCode,
             Socket sockets)

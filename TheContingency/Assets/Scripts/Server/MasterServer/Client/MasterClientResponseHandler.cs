@@ -5,7 +5,6 @@ using System.Linq;
 using System.Net.Sockets;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
-using Newtonsoft.Json;
 
 namespace SNetwork.Client
 {
@@ -28,10 +27,6 @@ namespace SNetwork.Client
             ResponseManager.instance.AddServerResponse(Response7, 7);
             ResponseManager.instance.AddServerResponse(Response9, 9);
             ResponseManager.instance.AddServerResponse(Response14, 14);
-            ResponseManager.instance.AddServerResponse(Response70, 70);
-            ResponseManager.instance.AddServerResponse(Response71, 71);
-            ResponseManager.instance.AddServerResponse(Response72, 72);
-            ResponseManager.instance.AddServerResponse(Response73, 73);
         }
 
         public void Response1(byte[] responseBytes, Socket fromSocket, int fromId)
@@ -69,30 +64,6 @@ namespace SNetwork.Client
         public void Response14(byte[] responseBytes, Socket fromSocket, int fromId)
         {
             _client.networkPlayers = ByteParser.ConvertToNetworkPlayers(responseBytes);
-        }
-
-        public void Response70(byte[] responseBytes, Socket fromSocket, int fromId)
-        {
-            _client.room = ByteParser.ConvertDataToRoom(responseBytes);
-        }
-
-        public void Response71(byte[] responseBytes, Socket fromSocket, int fromId)
-        {
-            _client.invites = ByteParser.ConvertDataToInvites(responseBytes).ToArray();
-        }
-
-        public void Response72(byte[] responseBytes, Socket fromSocket, int fromId)
-        {
-            _client.match = ByteParser.ConvertDataToMatch(responseBytes);
-        }
-
-        public void Response73(byte[] responseBytes, Socket fromSocket, int fromId)
-        {
-            // Recieved match callback!
-            Logging.CreateLog("Recieved Match!");
-            _client.match = ByteParser.ConvertDataToMatch(responseBytes);
-            if(MasterClientManager.instance.onMatchFound != null)
-                MasterClientManager.instance.onMatchFound.Invoke();
         }
     }
 }
