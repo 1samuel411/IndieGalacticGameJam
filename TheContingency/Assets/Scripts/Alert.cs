@@ -11,8 +11,8 @@ public class Alert : MonoBehaviour
     {
         string[] alertArray1 = {"air pressure","attitude","velocity"};
 		string[] alertArray2 = {"low","high"};
-		int rand1 = UnityEngine.Random.Range(0,2);
-		int rand2 = UnityEngine.Random.Range(0,1);
+		int rand1 = UnityEngine.Random.Range(0,alertArray1.Length);
+		int rand2 = UnityEngine.Random.Range(0,alertArray2.Length);
 		
 		string alertDisplay = "Your " + alertArray1[rand1] + " is "+alertArray2[rand2]+". Make a correction!";
 		Debug.Log(alertDisplay);
