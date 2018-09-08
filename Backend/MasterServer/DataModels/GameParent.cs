@@ -16,7 +16,7 @@ namespace MasterServerProj
         {
             Game newGame = new Game();
 
-            newGame.endTime = DateTime.UtcNow.AddSeconds(GetTargetTime()); 
+            newGame.endTime = DateTime.UtcNow.AddSeconds(GetTargetTime());
 
             // Persist
             if (game != null)
@@ -114,7 +114,8 @@ namespace MasterServerProj
         {
             int symbolsToGen = rand.Next(min, max);
 
-            // TODO: Add interval
+            Random temp = new Random();
+            int velocity = temp.Next(min/5,max/5)*5;
 
             return symbolsToGen;
         }
