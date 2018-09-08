@@ -11,5 +11,7 @@ namespace SNetwork
 		public bool startedGame;
         public List<int> usersInRoomIds = new List<int>();
         public List<MasterNetworkPlayer> usersInRoom = new List<MasterNetworkPlayer>();
+
+        public Game game;
     }
 }

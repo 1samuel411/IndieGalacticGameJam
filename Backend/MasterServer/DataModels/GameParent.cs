@@ -5,7 +5,7 @@ using System.Text;
 
 namespace MasterServerProj
 {
-    class GameParent
+    public class GameParent
     {
 
         public int round;

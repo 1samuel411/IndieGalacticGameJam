@@ -5,7 +5,7 @@ using System.Text;
 
 namespace MasterServerProj
 {
-    class Game
+    public class Game
     {
 
         public DateTime endTime; // Time allowed to complete the alert

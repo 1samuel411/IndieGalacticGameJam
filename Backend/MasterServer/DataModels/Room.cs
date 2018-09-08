@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MasterServerProj;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,6 +13,7 @@ namespace SNetwork.Server
 		public bool startedGame;
         public List<int> usersInRoomIds = new List<int>();
         public List<MasterNetworkPlayer> usersInRoom = new List<MasterNetworkPlayer>();
+        public Game game;
 
         public Room (int userId)
         {

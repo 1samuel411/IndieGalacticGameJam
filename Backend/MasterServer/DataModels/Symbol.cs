@@ -5,7 +5,7 @@ using System.Text;
 
 namespace MasterServerProj
 {
-    class Symbol
+    public class Symbol
     {
 
         public int value;

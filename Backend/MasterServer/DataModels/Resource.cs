@@ -5,7 +5,7 @@ using System.Text;
 
 namespace MasterServerProj
 {
-    class Resource
+    public class Resource
     {
 
         public string name;
