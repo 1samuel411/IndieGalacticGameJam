@@ -8,7 +8,7 @@ namespace MasterServerProj
     class Game
     {
 
-        public DateTime endTime;
+        public DateTime endTime; // Time allowed to complete the alert
 
         public Resource attitude;
         public Resource cabinPressure;
