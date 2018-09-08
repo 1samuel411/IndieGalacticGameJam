@@ -16,7 +16,7 @@ public class WaitingScreen : MonoBehaviour
         public Text userName;
         public Image statusImage;
     }
-
+    public User 
 
     void Start()
     {
@@ -25,6 +25,16 @@ public class WaitingScreen : MonoBehaviour
 
     void Update()
     {
+        UpdateUI();
+    }
 
+    void UpdateUI()
+    {
+        Room room = MasterClientManager.instance.GetRoom();
+
+        for(int i = 0; i < room.usersInRoom.Count; i++)
+        {
+            
+        }
     }
 }

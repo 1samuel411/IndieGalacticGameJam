@@ -107,6 +107,16 @@ namespace MasterServerProj
 
             int symbolsToGenerate = GetRandNumberInterval(min, max, interval);
 
+            string symbolsToGenerateStr = symbolsToGenerate.ToString();
+            for(int i  = 0; i < symbolsToGenerateStr.Length; i++)
+            {
+                int x = int.Parse(symbolsToGenerateStr[i].ToString());
+                Symbol symbol = new Symbol();
+                symbol.unicodeValue = Symbol.characters[x].ToString();
+                symbol.value = x;
+                symbols.Add(symbol);
+            }
+
             return symbols;
         }
 
@@ -115,6 +125,7 @@ namespace MasterServerProj
             int symbolsToGen = rand.Next(min, max);
 
             // TODO: Add interval
+
 
             return symbolsToGen;
         }
