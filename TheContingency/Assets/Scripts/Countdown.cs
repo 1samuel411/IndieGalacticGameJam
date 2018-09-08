@@ -8,13 +8,15 @@ using System.Threading;
 public class DisplayTimer : MonoBehaviour
 {
     public TextMesh timer;
+    double seconds = 0;
+    double miliseconds = 0;
 
 	void Start()
 	{
-        DateTime endTime = GetComponent<MasterClientManager.instance.GetRoom>();
-        DateTime MaxTime = endTime - DateTime.Now.ToUniversalTime();
-        seconds = MaxTime.Second;
-        miliseconds = MaxTime.Millisecond;
+        DateTime endTime = MasterClientManager.instance.GetRoom().game.game.endTime;
+        TimeSpan MaxTime = endTime - DateTime.UtcNow;
+        seconds = MaxTime.TotalSeconds;
+        miliseconds = MaxTime.TotalMilliseconds;
     }
 
 	void Update()
