@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,18 +7,32 @@ using System.Threading;
 
 public class DisplayTimer : MonoBehaviour
 {
-
-	public TextMesh timer;
-	float second = 0;
-	float milliseconds = 0;
-	//float MaxTime = endTime-DateTime.ToUniversalTime();
+    public TextMesh timer;
 
 	void Start()
 	{
-		//second = DateTime.ParseExact(MaxTime, "H:m:s", null);
-	}
+        DateTime endTime = GetComponent<MasterClientManager.instance.GetRoom>();
+        DateTime MaxTime = endTime - DateTime.Now.ToUniversalTime();
+        seconds = MaxTime.Second;
+        miliseconds = MaxTime.Millisecond;
+    }
 
 	void Update()
 	{
-	}
+        if (miliseconds <= 0)
+        {
+            if (seconds <= 0)
+            {
+                seconds = 59;
+            }
+            else if (seconds >= 0)
+            {
+                seconds--;
+            }
+
+            miliseconds = 100;
+        }
+        miliseconds -= Time.deltaTime * 100;
+        timer.text = string.Format("{0}.{1}",seconds,miliseconds);
+    }
 }
