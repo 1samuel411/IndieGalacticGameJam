@@ -13,6 +13,7 @@ namespace SNetwork
 
         public int id = -1;
         public string username = "";
+        public bool ready = false;
 
         public MasterNetworkPlayer(int id, string username)
         {
@@ -31,5 +32,6 @@ namespace SNetwork
             this.id = -1;
             this.username = "";
         }
+
 	}
 }

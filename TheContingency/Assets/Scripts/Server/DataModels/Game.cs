@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-
+[Serializable]
 public class Game
 {
 
@@ -17,5 +17,5 @@ public class Game
     public int targetSpeed;
 
     public Alert alert;
-
+    
 }

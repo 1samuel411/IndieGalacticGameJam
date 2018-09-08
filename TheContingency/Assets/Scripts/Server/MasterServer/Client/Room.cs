@@ -1,9 +1,9 @@
-﻿using System;
+﻿using SNetwork;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
+using SNetwork;
 
-namespace SNetwork
-{
     [Serializable]
     public class Room
     {
@@ -12,6 +12,5 @@ namespace SNetwork
         public List<int> usersInRoomIds = new List<int>();
         public List<MasterNetworkPlayer> usersInRoom = new List<MasterNetworkPlayer>();
 
-        public Game game;
-    }
+        public GameParent game;
 }

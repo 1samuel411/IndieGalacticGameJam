@@ -12,6 +12,7 @@ namespace SNetwork
 
         public int id = -1;
         public string username;
+        public bool ready;
 
         public MasterNetworkPlayer(int id, string username)
         {

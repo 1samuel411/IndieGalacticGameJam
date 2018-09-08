@@ -9,14 +9,10 @@ namespace MasterServerProj
     {
 
         public DateTime endTime; // Time allowed to complete the alert
-
+        
         public Resource attitude;
         public Resource cabinPressure;
         public Resource speed;
-
-        public int targetAttitude;
-        public int targetCabinPressure;
-        public int targetSpeed;
 
         public Alert alert;
 

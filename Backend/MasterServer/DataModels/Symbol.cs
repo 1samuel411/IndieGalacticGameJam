@@ -10,9 +10,5 @@ namespace MasterServerProj
 
         public int value;
         public string unicodeValue;
-        // 1 = Red
-        // 2 = Green
-        // 3 = Blue
-        public int colorValue;
     }
 }

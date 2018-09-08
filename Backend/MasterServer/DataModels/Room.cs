@@ -13,7 +13,7 @@ namespace SNetwork.Server
 		public bool startedGame;
         public List<int> usersInRoomIds = new List<int>();
         public List<MasterNetworkPlayer> usersInRoom = new List<MasterNetworkPlayer>();
-        public Game game;
+        public GameParent game;
 
         public Room (int userId)
         {
