@@ -54,7 +54,7 @@ public class StartScreen : MonoBehaviour
 
         MasterClientManager.instance.JoinRoom(int.Parse(gameId));
 
-        UIManager.instance.loadingScreen.gameObject.SetActive(false);
+        UIManager.instance.loadingScreen.gameObject.SetActive(true);
         UIManager.instance.loadingScreen.SetText("Entering Game");
     }
 
@@ -64,7 +64,7 @@ public class StartScreen : MonoBehaviour
 
         MasterClientManager.instance.CreateRoom();
 
-        UIManager.instance.loadingScreen.gameObject.SetActive(false);
+        UIManager.instance.loadingScreen.gameObject.SetActive(true);
         UIManager.instance.loadingScreen.SetText("Creating Game");
     }
 
@@ -84,6 +84,7 @@ public class StartScreen : MonoBehaviour
             if(MasterClientManager.instance.GetRoom() != null)
             {
                 gameObject.SetActive(false);
+                UIManager.instance.loadingScreen.gameObject.SetActive(false);
                 UIManager.instance.waitingScreen.gameObject.SetActive(true);
             }
         }

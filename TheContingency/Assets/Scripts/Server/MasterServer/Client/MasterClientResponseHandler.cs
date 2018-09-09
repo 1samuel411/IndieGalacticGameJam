@@ -54,16 +54,23 @@ namespace SNetwork.Client
         public void Response7(byte[] responseBytes, Socket fromSocket, int fromId)
         {
             string message = ByteParser.ConvertToASCII(responseBytes);
-            Logging.CreateLog("Recieved a message: " + ByteParser.ConvertToASCII(responseBytes));
+            Logging.CreateLog("Recieved a message: " + message);
 
-            if(message == "[Full Room]")
+            if(message.Contains("Full Room"))
             {
+                Logging.CreateLog("Room full!!!");
                 UIManager.instance.FailedConnect("Full");
             }
 
-            if(message == "[Not Exist]")
+            if(message.Contains("Not Exist"))
             {
+                Logging.CreateLog("Room DNE!!!");
                 UIManager.instance.FailedConnect("Not Exist");
+            }
+
+            if(message.Contains("Over"))
+            {
+                UIManager.instance.Over();
             }
         }
 

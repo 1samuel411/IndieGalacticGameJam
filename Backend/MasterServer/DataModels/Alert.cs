@@ -5,6 +5,7 @@ using System.Text;
 
 namespace MasterServerProj
 {
+    [Serializable]
     public class Alert
     {
 

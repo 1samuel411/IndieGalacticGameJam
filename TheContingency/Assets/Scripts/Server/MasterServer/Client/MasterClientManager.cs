@@ -12,7 +12,7 @@ using UnityEngine;
 public class MasterClientManager : MonoBehaviour
 {
 
-    private MasterClient _client;
+    public MasterClient _client;
     private MasterClientResponseHandler _clientResponseHandler;
 
     private static MasterClientManager _instance;
@@ -200,6 +200,11 @@ public class MasterClientManager : MonoBehaviour
     public void CreateRoom()
     {
         MasterMessaging.instance.SendCreateRoom(_client);
+    }
+
+    public void LeaveRoom()
+    {
+        MasterMessaging.instance.SendLeaveRoom(_client);
     }
 
     public void ToggleReady()

@@ -1,16 +1,22 @@
-﻿using System;
+﻿using MasterServerProj.DataModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
 namespace MasterServerProj
 {
+    [Serializable]
     public class GameParent
     {
 
+        public bool beatLast = false;
         public int round;
         public int funding;
-        public Game game;
+        public bool ended;
+        public Game game = new Game();
+        public ControllerInput inputA;
+        public ControllerInput inputB;
 
         public Game GenerateGame()
         {
@@ -18,8 +24,11 @@ namespace MasterServerProj
 
             newGame.endTime = DateTime.UtcNow.AddSeconds(GetTargetTime());
 
+            inputA = null;
+            inputB = null;
+
             // Persist
-            if (game != null)
+            if (game != null && newGame.attitude != null && newGame.attitude.name != "")
             {
                 newGame.attitude = game.attitude;
                 newGame.cabinPressure = game.cabinPressure;
@@ -30,17 +39,17 @@ namespace MasterServerProj
             {
                 newGame.attitude = new Resource();
                 newGame.attitude.name = "Attitude";
-                newGame.attitude.symbol = GenerateSymbols(-90, 90, 5);
+                newGame.attitude.symbol = GenerateSymbols(0, 90, 5);
                 // -90-90 degrees
 
                 newGame.cabinPressure = new Resource();
                 newGame.cabinPressure.name = "Cabin Pressure";
-                newGame.attitude.symbol = GenerateSymbols(10, 20, 1);
+                newGame.cabinPressure.symbol = GenerateSymbols(10, 20, 1);
                 // 10 - 20 PSI
 
                 newGame.speed = new Resource();
                 newGame.speed.name = "Speed";
-                newGame.attitude.symbol = GenerateSymbols(0, 1000, 100);
+                newGame.speed.symbol = GenerateSymbols(0, 1000, 100);
                 // 0-1000 ft/s
             }
 
@@ -49,14 +58,14 @@ namespace MasterServerProj
             if (randResource == 0)
             {
                 newGame.alert.resource = newGame.attitude;
-                newGame.alert.targetResourceValue = GetRandNumberInterval(-90, 90, 5);
+                newGame.alert.targetResourceValue = GetRandNumberInterval(0, 90, 5);
             }
             else if (randResource == 1)
             {
                 newGame.alert.resource = newGame.cabinPressure;
                 newGame.alert.targetResourceValue = GetRandNumberInterval(10, 20, 1);
             }
-            else if (randResource == 2)
+            else
             {
                 newGame.alert.resource = newGame.speed;
                 newGame.alert.targetResourceValue = GetRandNumberInterval(0, 1000, 100);
@@ -106,7 +115,8 @@ namespace MasterServerProj
             List<Symbol> symbols = new List<Symbol>();
 
             int symbolsToGenerate = GetRandNumberInterval(min, max, interval);
-
+            if (symbolsToGenerate < 0)
+                symbolsToGenerate *= -1;
             string symbolsToGenerateStr = symbolsToGenerate.ToString();
             for(int i  = 0; i < symbolsToGenerateStr.Length; i++)
             {

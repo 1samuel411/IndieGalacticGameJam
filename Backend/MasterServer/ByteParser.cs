@@ -9,6 +9,7 @@ using System.Text;
 using Newtonsoft.Json;
 using SNetwork;
 using SNetwork.Server;
+using MasterServerProj.DataModels;
 
 namespace SNetwork
 {
@@ -81,8 +82,25 @@ namespace SNetwork
 
         public static byte[] ConvertRoomToData(Room room)
         {
-            room.Refresh();
+            if (room != null)
+                room.Refresh();
             string jsonString = JsonConvert.SerializeObject(room);
+            return ConvertASCIIToBytes(jsonString);
+        }
+
+        public static ControllerInput ConvertDataToInput(byte[] data)
+        {
+            string jsonString = ConvertToASCII(data);
+            if (jsonString.Contains("}") == false)
+                jsonString += "}";
+
+
+            return JsonConvert.DeserializeObject<ControllerInput>(jsonString);
+        }
+
+        public static byte[] ConvertInputToData(ControllerInput input)
+        {
+            string jsonString = JsonConvert.SerializeObject(input);
             return ConvertASCIIToBytes(jsonString);
         }
 

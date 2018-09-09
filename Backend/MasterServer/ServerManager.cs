@@ -57,6 +57,7 @@ namespace SNetwork.Server
                     for (int i = 0; i < server.rooms.Count; i++)
                     {
                         Console.WriteLine("Room: " + server.rooms[i].roomId);
+                        Console.WriteLine("        Started: " + server.rooms[i].startedGame);
                         Console.WriteLine("        Users");
                         for (int x = 0; x < server.rooms[i].usersInRoomIds.Count; x++)
                         {

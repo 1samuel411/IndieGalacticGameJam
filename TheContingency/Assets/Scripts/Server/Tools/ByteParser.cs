@@ -60,6 +60,23 @@ namespace SNetwork
             return ConvertASCIIToBytes(jsonString);
         }
 
+
+        public static ControllerInput ConvertDataToInput(byte[] data)
+        {
+            string jsonString = ConvertToASCII(data);
+            if (jsonString.Contains("}") == false)
+                jsonString += "}";
+
+
+            return JsonConvert.DeserializeObject<ControllerInput>(jsonString);
+        }
+
+        public static byte[] ConvertInputToData(ControllerInput input)
+        {
+            string jsonString = JsonConvert.SerializeObject(input);
+            return ConvertASCIIToBytes(jsonString);
+        }
+
         public static KeyValuePairs[] ConvertDataToKeyValuePairs(byte[] data)
         {
             string jsonString = ConvertToASCII(data);

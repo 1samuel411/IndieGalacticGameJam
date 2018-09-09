@@ -24,11 +24,25 @@ namespace SNetwork
             }
         }
 
+        // Header: 100
+        public void SendControllerInput(MasterClient client, ControllerInput controllerInput)
+        {
+            byte[] data = ByteParser.ConvertInputToData(controllerInput);
+            SendFinal(data, 100, 2, client.ourId, 0, client.clientSocket);
+        }
+
         // Header: 80
         public void SendToggleReady(MasterClient client)
         {
             byte[] data = ByteParser.ConvertASCIIToBytes("");
             SendFinal(data, 80, 2, client.ourId, 0, client.clientSocket);
+        }
+
+        // Header: 53
+        public void SendLeaveRoom(MasterClient client)
+        {
+            byte[] data = ByteParser.ConvertASCIIToBytes("");
+            SendFinal(data, 53, 2, client.ourId, 0, client.clientSocket);
         }
 
         // Header: 52

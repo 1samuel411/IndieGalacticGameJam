@@ -1,4 +1,5 @@
 ﻿using MasterServerProj;
+using MasterServerProj.DataModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -72,14 +73,274 @@ namespace SNetwork.Server
             {
                 iteration++;
 
-                Thread.Sleep((int) (500));
+                Thread.Sleep((int) (200));
 
-				// Send rooms to users
+                // Send rooms to users
+                List<int> usersGotit = new List<int>();
                 for(int i = 0; i < rooms.Count; i++)
                 {
                     for(int x = 0; x < rooms[i].usersInRoomIds.Count; x++)
                     {
+                        usersGotit.Add(rooms[i].usersInRoomIds[x]);
                         Messaging.instance.SendRoom(rooms[i], rooms[i].usersInRoomIds[x], clientSockets);
+                    }
+                }
+
+                Thread.Sleep((int)(200));
+
+                for (int i = 0; i < clientSockets.Count; i++)
+                {
+                    if(!usersGotit.Contains(clientSockets.ElementAt(i).Value.id))
+                    {
+                        Messaging.instance.SendRoom(null, clientSockets.ElementAt(i).Value.id, clientSockets);
+                    }
+                }
+
+                Thread.Sleep((int)(200));
+
+                for(int i = 0; i < rooms.Count; i++)
+                {
+                    if (rooms[i].startedGame)
+                    {
+                        if ((rooms[i].game.funding <= 0 || DateTime.UtcNow > rooms[i].game.game.endTime) && !rooms[i].game.ended)
+                        {
+                            rooms[i].game.ended = true;
+                            for (int x = 0; x < rooms[i].usersInRoom.Count; x++)
+                            {
+                                Socket socket = clientSockets.FirstOrDefault(p => p.Value.id == rooms[i].usersInRoom[x].id).Key;
+                                Messaging.instance.SendInfoMessage(socket, "Over", 0);
+                            }
+                        }
+
+                        if (rooms[i].game.round >= 7)
+                        {
+                            continue;
+                        }
+
+                        if (rooms[i].game.funding <= 0)
+                        {
+                            continue;
+                        }
+
+                        if (rooms[i].game.ended && rooms[i].game.inputA != null && rooms[i].game.inputB != null)
+                        {
+                            rooms[i].game.ended = false;
+                            Console.WriteLine("Ended Room: " + rooms[i].roomId);
+
+                            Console.WriteLine("  Input A (Pressure): " + rooms[i].game.inputA.pressure);
+                            Console.WriteLine("  Input A (Speed): " + rooms[i].game.inputA.speed);
+                            Console.WriteLine("  Input A (Attitude): " + rooms[i].game.inputA.attitude);
+
+                            Console.WriteLine("  Input B (Pressure): " + rooms[i].game.inputB.pressure);
+                            Console.WriteLine("  Input B (Speed): " + rooms[i].game.inputB.speed);
+                            Console.WriteLine("  Input B (Attitude): " + rooms[i].game.inputB.attitude);
+
+                            string attitudeStr = "";
+                            for (int p = 0; p < rooms[i].game.game.attitude.symbol.Count; p++)
+                            {
+                                attitudeStr += rooms[i].game.game.attitude.symbol[p].value;
+                            }
+                            int attitudeNew = (int.Parse(attitudeStr));
+
+                            attitudeNew += rooms[i].game.inputA.attitude;
+
+                            if (attitudeNew < 0)
+                                attitudeNew *= -1;
+
+                            string symbolsToGenerateStr = attitudeNew.ToString();
+                            List<Symbol> symbols = new List<Symbol>();
+                            for (int p = 0; p < symbolsToGenerateStr.Length; p++)
+                            {
+                                int x = int.Parse(symbolsToGenerateStr[p].ToString());
+                                Symbol symbol = new Symbol();
+                                symbol.unicodeValue = Symbol.characters[x].ToString();
+                                symbol.value = x;
+                                symbols.Add(symbol);
+                            }
+                            rooms[i].game.game.attitude.symbol = symbols;
+
+                            attitudeStr = "";
+                            for (int p = 0; p < rooms[i].game.game.cabinPressure.symbol.Count; p++)
+                            {
+                                attitudeStr += rooms[i].game.game.cabinPressure.symbol[p].value;
+                            }
+                            attitudeNew = (int.Parse(attitudeStr));
+
+                            attitudeNew += rooms[i].game.inputA.pressure;
+
+                            if (attitudeNew < 0)
+                                attitudeNew *= -1;
+
+                            symbolsToGenerateStr = attitudeNew.ToString();
+                            symbols = new List<Symbol>();
+                            for (int p = 0; p < symbolsToGenerateStr.Length; p++)
+                            {
+                                int x = int.Parse(symbolsToGenerateStr[p].ToString());
+                                Symbol symbol = new Symbol();
+                                symbol.unicodeValue = Symbol.characters[x].ToString();
+                                symbol.value = x;
+                                symbols.Add(symbol);
+                            }
+                            rooms[i].game.game.cabinPressure.symbol = symbols;
+
+                            attitudeStr = "";
+                            for (int p = 0; p < rooms[i].game.game.speed.symbol.Count; p++)
+                            {
+                                attitudeStr += rooms[i].game.game.speed.symbol[p].value;
+                            }
+                            attitudeNew = (int.Parse(attitudeStr));
+
+                            attitudeNew += rooms[i].game.inputA.speed;
+
+                            if (attitudeNew < 0)
+                                attitudeNew *= -1;
+
+                            symbolsToGenerateStr = attitudeNew.ToString();
+                            symbols = new List<Symbol>();
+                            for (int p = 0; p < symbolsToGenerateStr.Length; p++)
+                            {
+                                int x = int.Parse(symbolsToGenerateStr[p].ToString());
+                                Symbol symbol = new Symbol();
+                                symbol.unicodeValue = Symbol.characters[x].ToString();
+                                symbol.value = x;
+                                symbols.Add(symbol);
+                            }
+                            rooms[i].game.game.speed.symbol = symbols;
+
+                            attitudeStr = "";
+                            for (int p = 0; p < rooms[i].game.game.attitude.symbol.Count; p++)
+                            {
+                                attitudeStr += rooms[i].game.game.attitude.symbol[p].value;
+                            }
+                            attitudeNew = (int.Parse(attitudeStr));
+
+                            attitudeNew += rooms[i].game.inputB.attitude;
+
+                            if (attitudeNew < 0)
+                                attitudeNew *= -1;
+
+                            symbolsToGenerateStr = attitudeNew.ToString();
+                            symbols = new List<Symbol>();
+                            for (int p = 0; p < symbolsToGenerateStr.Length; p++)
+                            {
+                                int x = int.Parse(symbolsToGenerateStr[p].ToString());
+                                Symbol symbol = new Symbol();
+                                symbol.unicodeValue = Symbol.characters[x].ToString();
+                                symbol.value = x;
+                                symbols.Add(symbol);
+                            }
+                            rooms[i].game.game.attitude.symbol = symbols;
+
+                            attitudeStr = "";
+                            for (int p = 0; p < rooms[i].game.game.cabinPressure.symbol.Count; p++)
+                            {
+                                attitudeStr += rooms[i].game.game.cabinPressure.symbol[p].value;
+                            }
+                            attitudeNew = (int.Parse(attitudeStr));
+
+                            attitudeNew += rooms[i].game.inputB.pressure;
+
+                            if (attitudeNew < 0)
+                                attitudeNew *= -1;
+
+                            symbolsToGenerateStr = attitudeNew.ToString();
+                            symbols = new List<Symbol>();
+                            for (int p = 0; p < symbolsToGenerateStr.Length; p++)
+                            {
+                                int x = int.Parse(symbolsToGenerateStr[p].ToString());
+                                Symbol symbol = new Symbol();
+                                symbol.unicodeValue = Symbol.characters[x].ToString();
+                                symbol.value = x;
+                                symbols.Add(symbol);
+                            }
+                            rooms[i].game.game.cabinPressure.symbol = symbols;
+
+                            attitudeStr = "";
+                            for (int p = 0; p < rooms[i].game.game.speed.symbol.Count; p++)
+                            {
+                                attitudeStr += rooms[i].game.game.speed.symbol[p].value;
+                            }
+                            attitudeNew = (int.Parse(attitudeStr));
+
+                            attitudeNew += rooms[i].game.inputB.speed;
+
+                            if (attitudeNew < 0)
+                                attitudeNew *= -1;
+
+                            symbolsToGenerateStr = attitudeNew.ToString();
+                            symbols = new List<Symbol>();
+                            for (int p = 0; p < symbolsToGenerateStr.Length; p++)
+                            {
+                                int x = int.Parse(symbolsToGenerateStr[p].ToString());
+                                Symbol symbol = new Symbol();
+                                symbol.unicodeValue = Symbol.characters[x].ToString();
+                                symbol.value = x;
+                                symbols.Add(symbol);
+                            }
+                            rooms[i].game.game.speed.symbol = symbols;
+
+                            bool beatLast = false;
+
+                            if(rooms[i].game.game.alert.resource.name == "Attitude")
+                            {
+                                attitudeStr = "";
+                                for (int x = 0; x < rooms[i].game.game.attitude.symbol.Count; x++)
+                                {
+                                    attitudeStr += rooms[i].game.game.attitude.symbol[x].value;
+                                }
+                                int attitudeVal = (int.Parse(attitudeStr));
+                                
+                                if(attitudeVal == rooms[i].game.game.alert.targetResourceValue)
+                                {
+                                    beatLast = true;
+                                }
+                            }
+                            else if(rooms[i].game.game.alert.resource.name == "Cabin Pressure")
+                            {
+                                attitudeStr = "";
+                                for (int x = 0; x < rooms[i].game.game.cabinPressure.symbol.Count; x++)
+                                {
+                                    attitudeStr += rooms[i].game.game.cabinPressure.symbol[x].value;
+                                }
+                                int attitudeVal = (int.Parse(attitudeStr));
+
+                                if (attitudeVal == rooms[i].game.game.alert.targetResourceValue)
+                                {
+                                    beatLast = true;
+                                }
+                            }
+                            else if(rooms[i].game.game.alert.resource.name == "Speed")
+                            {
+                                attitudeStr = "";
+                                for (int x = 0; x < rooms[i].game.game.speed.symbol.Count; x++)
+                                {
+                                    attitudeStr += rooms[i].game.game.speed.symbol[x].value;
+                                }
+                                int attitudeVal = (int.Parse(attitudeStr));
+
+                                if (attitudeVal == rooms[i].game.game.alert.targetResourceValue)
+                                {
+                                    beatLast = true;
+                                }
+                            }
+
+                            rooms[i].game.inputA = null;
+                            rooms[i].game.inputA = null;
+
+                            Random rand = new Random();
+                            if(beatLast)
+                            {
+                                rooms[i].game.funding += rand.Next(20000, 30000);
+                            }
+                            else
+                            {
+                                rooms[i].game.funding -= rand.Next(40000, 60000);
+                            }
+
+                            rooms[i].game.beatLast = beatLast;
+                            rooms[i].game.game = rooms[i].game.GenerateGame();
+                            rooms[i].game.round++;
+                        }
                     }
                 }
             }
@@ -158,6 +419,8 @@ namespace SNetwork.Server
 
             BeginReceiving(socket);
             BeginAccepting();
+
+            Messaging.instance.SendId(uniqueId, uniqueId, 0, 0, clientSockets);
         }
 
         private void ReceiveCallback(IAsyncResult AR)
@@ -256,7 +519,7 @@ namespace SNetwork.Server
             Room room = GetRoom(clientSockets[socket].id);
             if (room != null)
             {
-                DeleteRoom(room.roomId);
+                LeaveRoom(socket);
             }
             clientSockets.Remove(socket);
         }
@@ -273,7 +536,9 @@ namespace SNetwork.Server
 
             if(roomToJoin != null)
             {
-                if(roomToJoin.usersInRoomIds.Count > 2)
+                Console.WriteLine("Found room!");
+
+                if (roomToJoin.usersInRoomIds.Count > 2)
                 {
                     // Full
                     Messaging.instance.SendInfoMessage(fromUser, "[Full Room]", 0);
@@ -281,6 +546,11 @@ namespace SNetwork.Server
                 }
                 roomToJoin.usersInRoomIds.Add(clientSockets[fromUser].id);
                 roomToJoin.Refresh();
+            }
+            else
+            {
+                Messaging.instance.SendInfoMessage(fromUser, "[Not Exist]", 0);
+                Console.WriteLine("Could not find room!");
             }
         }
 
@@ -290,9 +560,25 @@ namespace SNetwork.Server
             MasterNetworkPlayer masterNetworkPlayer = clientSockets[fromSocket];
 
             Room room = new Room(masterNetworkPlayer.id);
-            room.roomId = random.Next(0, 9) + random.Next(0, 9) + random.Next(0, 9) + random.Next(0, 9).ToString();
-
+            room.roomId = random.Next(1, 9) + "" + random.Next(0, 9) + "" + random.Next(0, 9) + "" + random.Next(0, 9).ToString();
+            while(rooms.Count(x=>x.roomId == room.roomId) > 0)
+            {
+                room.roomId = random.Next(1, 9) + "" + random.Next(0, 9) + "" + random.Next(0, 9) + "" + random.Next(0, 9).ToString();
+            }
             rooms.Add(room);
+        }
+
+        public void LeaveRoom(Socket socket)
+        {
+            Room room = GetRoom(clientSockets[socket].id);
+
+            if(room != null)
+            {
+                room.usersInRoomIds.Remove(clientSockets[socket].id);
+                room.Refresh();
+                if(room.usersInRoomIds.Count <= 0 || room.startedGame)
+                    DeleteRoom(room.roomId);
+            }
         }
 
         private Room GetRoom(int userId)
@@ -317,6 +603,66 @@ namespace SNetwork.Server
             player.ready = !player.ready;
 
             Console.WriteLine("Ready toggled! " + player.ready);
+
+            Room room = GetRoom(player.id);
+            room.Refresh();
+            bool allReady = true;
+            for(int i = 0; i < room.usersInRoom.Count; i++)
+            {
+                if (room.usersInRoom[i].ready == false)
+                    allReady = false;
+            }
+
+            if (room.usersInRoom.Count < 3)
+                allReady = false;
+
+            if(allReady)
+            {
+                StartGame(room);
+            }
+        }
+
+        public void StartGame(Room room)
+        {
+            Console.WriteLine("Starting Room: " + room.roomId);
+            room.startedGame = true;
+            room.game = new GameParent();
+
+            room.Refresh();
+
+            int randomUser = random.Next(0, 3);
+
+            room.usersInRoom[randomUser].commander = true;
+
+            for (int i = 0; i < room.usersInRoom.Count; i++)
+            {
+                if (!room.usersInRoom[i].commander)
+                {
+                    room.usersInRoom[i].a = true;
+                    break;
+                }
+            }
+
+            room.game.round = 0;
+            room.game.funding = 100000;
+            room.game.game = room.game.GenerateGame();
+        }
+
+        public void SetInput(Socket socket, ControllerInput input)
+        {
+            Room room = GetRoom(clientSockets[socket].id);
+
+            if (room == null)
+                return;
+
+            if(clientSockets[socket].a)
+            {
+                room.game.inputA = input;
+            }
+            else
+            {
+                room.game.inputB = input;
+            }
         }
     }
 }

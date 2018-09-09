@@ -41,6 +41,13 @@ public class WaitingScreen : MonoBehaviour
             return;
         }
 
+        if(room.startedGame)
+        {
+            gameObject.SetActive(false);
+            UIManager.instance.screenAll.gameObject.SetActive(true);
+            return;
+        }
+
         int playerNeeded = 3 - room.usersInRoom.Count;
         string myName = "";
         for (int i = 0; i < users.Length; i++)
@@ -70,6 +77,11 @@ public class WaitingScreen : MonoBehaviour
 
         gameDataText.text = "Room ID: " + room.roomId + "\n\n" + "We need " + playerNeeded + " player(s)";
 
+    }
+
+    public void LeaveGame()
+    {
+        MasterClientManager.instance.LeaveRoom();
     }
 
     public void ToggleReady()
