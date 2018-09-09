@@ -8,7 +8,8 @@ public class AlertText : MonoBehaviour
 
     void Start ()
     {
-
+        Resource resource = MasterClientManager.instance.GetRoom().game.game.alert.resource;
+        int targetResourceValue = MasterClientManager.instance.GetRoom().game.game.alert.targetResourceValue;
     }
 
     void Update()
