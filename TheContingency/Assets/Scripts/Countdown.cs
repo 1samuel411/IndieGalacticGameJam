@@ -13,28 +13,18 @@ public class Countdown : MonoBehaviour
 
 	void Start()
 	{
-        DateTime endTime = MasterClientManager.instance.GetRoom().game.game.endTime;
-        TimeSpan MaxTime = endTime - DateTime.UtcNow;
-        seconds = MaxTime.TotalSeconds;
-        miliseconds = MaxTime.TotalMilliseconds;
+
     }
 
 	void Update()
 	{
-        if (miliseconds <= 0)
-        {
-            if (seconds <= 0)
-            {
-                seconds = 59;
-            }
-            else if (seconds >= 0)
-            {
-                seconds--;
-            }
+        DateTime endTime = MasterClientManager.instance.GetRoom().game.game.endTime;
+        TimeSpan MaxTime = endTime - DateTime.UtcNow;
+        seconds = MaxTime.TotalSeconds;
+        seconds = Mathf.Clamp((float)seconds,0,9999);
+        miliseconds = MaxTime.TotalMilliseconds;
+        miliseconds = Mathf.Clamp((float)miliseconds, 0, 9999);
 
-            miliseconds = 100;
-        }
-        miliseconds -= Time.deltaTime * 100;
         timer.text = string.Format("{0}.{1}",seconds,miliseconds);
     }
 }
