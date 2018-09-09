@@ -5,9 +5,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Threading;
 
-public class DisplayTimer : MonoBehaviour
+public class Countdown : MonoBehaviour
 {
-    public TextMesh timer;
+    public Text timer;
     double seconds = 0;
     double miliseconds = 0;
 
