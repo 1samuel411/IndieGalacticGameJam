@@ -24,11 +24,11 @@ namespace MasterServerProj
 
             newGame.endTime = DateTime.UtcNow.AddSeconds(GetTargetTime());
 
-            inputA = null;
-            inputB = null;
+            inputA = new ControllerInput();
+            inputB = new ControllerInput();
 
             // Persist
-            if (game != null && newGame.attitude != null && newGame.attitude.name != "")
+            if (1 == 2)
             {
                 newGame.attitude = game.attitude;
                 newGame.cabinPressure = game.cabinPressure;
@@ -54,7 +54,7 @@ namespace MasterServerProj
             }
 
             newGame.alert = new Alert();
-            int randResource = rand.Next(0, 2);
+            int randResource = rand.Next(0, 3);
             if (randResource == 0)
             {
                 newGame.alert.resource = newGame.attitude;
@@ -82,28 +82,28 @@ namespace MasterServerProj
             switch(round)
             {
                 case 0:
-                    time = rand.Next(30, 35);
+                    time = rand.Next(19, 20);
                     break;
                 case 1:
-                    time = rand.Next(29, 34);
+                    time = rand.Next(18, 19);
                     break;
                 case 2:
-                    time = rand.Next(27, 33);
+                    time = rand.Next(17, 18);
                     break;
                 case 3:
-                    time = rand.Next(25, 32);
+                    time = rand.Next(15, 18);
                     break;
                 case 4:
-                    time = rand.Next(23, 31);
+                    time = rand.Next(13, 15);
                     break;
                 case 5:
-                    time = rand.Next(22, 30);
+                    time = rand.Next(11, 13);
                     break;
                 case 6:
-                    time = rand.Next(21, 27);
+                    time = rand.Next(10, 13);
                     break;
                 case 7:
-                    time = rand.Next(20, 24);
+                    time = rand.Next(9, 13);
                     break;
             }
 

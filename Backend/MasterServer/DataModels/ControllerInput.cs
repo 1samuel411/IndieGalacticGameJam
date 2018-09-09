@@ -11,5 +11,6 @@ namespace MasterServerProj.DataModels
         public int attitude;
         public int pressure;
         public int speed;
+        public bool set = false;
     }
 }

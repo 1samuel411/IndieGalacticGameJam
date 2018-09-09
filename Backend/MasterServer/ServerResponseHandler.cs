@@ -32,7 +32,7 @@ namespace SNetwork.Server
 
             ResponseManager.instance.AddServerResponse(Response80, 80);
 
-            ResponseManager.instance.AddServerResponse(Response100, 100);
+            ResponseManager.instance.AddServerResponse(Response88, 88);
         }
 
         public void Response21(byte[] responseBytes, Socket fromSocket, int fromId)
@@ -101,9 +101,9 @@ namespace SNetwork.Server
             _server.ToggleReady(fromSocket);
         }
 
-        public void Response100(byte[] responseBytes, Socket fromSocket, int fromId)
+        public void Response88(byte[] responseBytes, Socket fromSocket, int fromId)
         {
-            Console.WriteLine("Recieved a 100: " + fromId + ": " + responseBytes.Length);
+            Console.WriteLine("Recieved a 88: " + fromId + ": " + responseBytes.Length);
             ControllerInput input = ByteParser.ConvertDataToInput(responseBytes);
             Console.WriteLine(input.attitude + ", " + input.pressure + ", " + input.speed);
             _server.SetInput(fromSocket, input);

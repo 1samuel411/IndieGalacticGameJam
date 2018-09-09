@@ -91,16 +91,19 @@ namespace SNetwork
         public static ControllerInput ConvertDataToInput(byte[] data)
         {
             string jsonString = ConvertToASCII(data);
-            if (jsonString.Contains("}") == false)
-                jsonString += "}";
-
-
-            return JsonConvert.DeserializeObject<ControllerInput>(jsonString);
+            string[] newString = jsonString.Split('|');
+            ControllerInput input = new ControllerInput();
+            input.attitude = int.Parse(newString[0]);
+            input.speed = int.Parse(newString[1]);
+            input.pressure = int.Parse(newString[2]);
+            input.set = true;
+            Console.WriteLine(jsonString);
+            return input;
         }
 
         public static byte[] ConvertInputToData(ControllerInput input)
         {
-            string jsonString = JsonConvert.SerializeObject(input);
+            string jsonString = input.attitude + "|" + input.speed + "|" + input.pressure;
             return ConvertASCIIToBytes(jsonString);
         }
 

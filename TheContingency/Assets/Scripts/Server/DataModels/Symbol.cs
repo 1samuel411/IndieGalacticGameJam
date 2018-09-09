@@ -6,6 +6,7 @@ using System.Text;
 [System.Serializable]
 public class Symbol
 {
+    public static char[] characters = { '☋', '☄', '≈', '☆', '☥', '♡', '☽', '♢', '☼', '☾' };
 
     public int value;
     public string unicodeValue;

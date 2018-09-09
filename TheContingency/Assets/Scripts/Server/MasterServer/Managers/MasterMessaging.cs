@@ -1,4 +1,5 @@
-﻿using SNetwork.Client;
+﻿using Newtonsoft.Json;
+using SNetwork.Client;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -24,11 +25,12 @@ namespace SNetwork
             }
         }
 
-        // Header: 100
+        // Header: 88
         public void SendControllerInput(MasterClient client, ControllerInput controllerInput)
         {
             byte[] data = ByteParser.ConvertInputToData(controllerInput);
-            SendFinal(data, 100, 2, client.ourId, 0, client.clientSocket);
+
+            SendFinal(data, 88, 2, client.ourId, 0, client.clientSocket);
         }
 
         // Header: 80

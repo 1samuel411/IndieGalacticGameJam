@@ -4,4 +4,5 @@ public class ControllerInput
     public int attitude;
     public int pressure;
     public int speed;
+    public bool set;
 }

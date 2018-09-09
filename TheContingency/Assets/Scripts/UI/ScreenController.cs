@@ -20,9 +20,9 @@ public class ScreenController : MonoBehaviour
     public Text cabinPressureText;
     public Text speedText;
 
-    void Start()
+    void OnEnable()
     {
-
+        controllerInput = new ControllerInput();
     }
 
     public void Send()

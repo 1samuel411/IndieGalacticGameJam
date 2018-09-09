@@ -58,6 +58,9 @@ namespace SNetwork.Server
                     {
                         Console.WriteLine("Room: " + server.rooms[i].roomId);
                         Console.WriteLine("        Started: " + server.rooms[i].startedGame);
+                        Console.WriteLine("        Ended: " + server.rooms[i].game.ended);
+                        Console.WriteLine("        Input A: " + server.rooms[i].game.inputA);
+                        Console.WriteLine("        Input B: " + server.rooms[i].game.inputB);
                         Console.WriteLine("        Users");
                         for (int x = 0; x < server.rooms[i].usersInRoomIds.Count; x++)
                         {
@@ -95,7 +98,7 @@ namespace SNetwork.Server
             }
         }
 
-        public void Create(string ip = "127.0.0.1", int port = 100, int bufferSize = 50000)
+        public void Create(string ip = "127.0.0.1", int port = 100, int bufferSize = 5000000)
         {
             server.SetupServer(ip, port, bufferSize);
         }

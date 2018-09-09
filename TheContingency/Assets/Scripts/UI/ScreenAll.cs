@@ -46,7 +46,7 @@ public class ScreenAll : MonoBehaviour
         if (room.game.game.alert != null)
             alertText.text = "Set " + room.game.game.alert.resource.name + " to " + room.game.game.alert.targetResourceValue;
 
-        fundingText.text = "Funding (m): $" + room.game.funding;
+        fundingText.text = "Funding: $" + room.game.funding;
         fundingFG.fillAmount = (float)room.game.funding / 100000;
 
         roundText.text = "Round: " + (room.game.round + 1) + " / 7";
@@ -57,6 +57,11 @@ public class ScreenAll : MonoBehaviour
         double seconds = Mathf.Clamp(diff.Seconds, 0, 60);
         double milliseconds = Mathf.Clamp(diff.Milliseconds, 0, 999);
         timerText.text = seconds + ":" + milliseconds;
+
+        if ((room.game.round >= 7 || room.game.funding < 0) && room.game.ended)
+        {
+            timerText.text = "";
+        }
     }
 
     public void LeaveGame()

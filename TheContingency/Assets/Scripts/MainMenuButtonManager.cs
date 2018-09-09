@@ -2,51 +2,72 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
-public class MainMenuButtonManager : MonoBehaviour {
+public class MainMenuButtonManager : MonoBehaviour
+{
 
-	public Animator anim;
+    public Animator anim;
 
-	public GameObject MainMenu;
-	public GameObject creditsMenu;
+    public GameObject MainMenu;
+    public GameObject creditsMenu;
 
-	void Start(){
-		MainMenu.SetActive (true);
-		creditsMenu.SetActive (false);
-	}
-
-	public void StartGame()
+    void Start()
     {
-		anim.SetBool ("closed", true);
+#if UNITY_STANDALONE
+        
+#endif
+        Screen.SetResolution(320, 480, false);
+        MainMenu.SetActive(true);
+        creditsMenu.SetActive(false);
     }
 
-	public void CreditsScreen(){
-		anim.SetBool ("closed", true);
-		StartCoroutine (MainMenuGone());
-	}
+    public void StartGame()
+    {
+        anim.SetBool("closed", true);
+        StartCoroutine(PlayGame());
+    }
 
-	public void QuitGame(){
-		Application.Quit ();
-	}
+    public void CreditsScreen()
+    {
+        anim.SetBool("closed", true);
+        StartCoroutine(MainMenuGone());
+    }
 
-	public void BackToMenu(){
-		anim.SetBool ("closed", true);
-		StartCoroutine (CreditsMenuGone());
-	}
+    public void QuitGame()
+    {
+        Application.Quit();
+    }
 
-	IEnumerator MainMenuGone(){
-		yield return new WaitForSeconds (2.0f);
-		MainMenu.SetActive (false);
-		creditsMenu.SetActive (true);
-		anim.SetBool ("closed", false);
-		StopCoroutine (MainMenuGone());
-	}
+    public void BackToMenu()
+    {
+        anim.SetBool("closed", true);
+        StartCoroutine(CreditsMenuGone());
+    }
 
-	IEnumerator CreditsMenuGone(){
-		yield return new WaitForSeconds (2.0f);
-		MainMenu.SetActive (true);
-		creditsMenu.SetActive (false);
-		anim.SetBool ("closed", false);
-		StopCoroutine (CreditsMenuGone());
-	}
+    IEnumerator MainMenuGone()
+    {
+        yield return new WaitForSeconds(1.4f);
+        MainMenu.SetActive(false);
+        creditsMenu.SetActive(true);
+        anim.SetBool("closed", false);
+        StopCoroutine(MainMenuGone());
+    }
+
+    IEnumerator PlayGame()
+    {
+        yield return new WaitForSeconds(1.4f);
+        SceneManager.LoadScene("Game");
+        anim.SetBool("closed", false);
+        StopCoroutine(MainMenuGone());
+    }
+
+    IEnumerator CreditsMenuGone()
+    {
+        yield return new WaitForSeconds(1.4f);
+        MainMenu.SetActive(true);
+        creditsMenu.SetActive(false);
+        anim.SetBool("closed", false);
+        StopCoroutine(CreditsMenuGone());
+    }
 }
