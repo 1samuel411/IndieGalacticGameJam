@@ -46,10 +46,9 @@ public class WaitingScreen : MonoBehaviour
         for (int i = 0; i < users.Length; i++)
         {
             MasterNetworkPlayer player = null;
-
-            if(room.usersInRoom.Count <= i)
+            if(i < room.usersInRoom.Count)
                 player = room.usersInRoom[i];
-            
+
             if (player != null)
             {
                 users[i].userName.text = player.username.ToString();
@@ -69,7 +68,12 @@ public class WaitingScreen : MonoBehaviour
             }
         }
 
-        gameDataText.text = "Room ID: " + room.roomId + "\n" + "Name: " + myName + "\n\n" + playerNeeded;
+        gameDataText.text = "Room ID: " + room.roomId + "\n\n" + "We need " + playerNeeded + " player(s)";
 
+    }
+
+    public void ToggleReady()
+    {
+        MasterClientManager.instance.ToggleReady();
     }
 }

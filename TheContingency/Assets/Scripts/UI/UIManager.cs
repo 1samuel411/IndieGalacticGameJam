@@ -23,4 +23,17 @@ public class UIManager : MonoBehaviour
     {
 
     }
+
+    public void FailedConnect(string issue)
+    {
+        if(issue == "Full")
+        {
+
+        }
+
+        if(issue == "Not Exist")
+        {
+
+        }
+    }
 }

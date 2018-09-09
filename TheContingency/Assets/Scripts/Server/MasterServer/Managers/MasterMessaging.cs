@@ -24,6 +24,13 @@ namespace SNetwork
             }
         }
 
+        // Header: 80
+        public void SendToggleReady(MasterClient client)
+        {
+            byte[] data = ByteParser.ConvertASCIIToBytes("");
+            SendFinal(data, 80, 2, client.ourId, 0, client.clientSocket);
+        }
+
         // Header: 52
         public void SendCreateRoom(MasterClient client)
         {

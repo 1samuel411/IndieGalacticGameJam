@@ -273,6 +273,12 @@ namespace SNetwork.Server
 
             if(roomToJoin != null)
             {
+                if(roomToJoin.usersInRoomIds.Count > 2)
+                {
+                    // Full
+                    Messaging.instance.SendInfoMessage(fromUser, "[Full Room]", 0);
+                    return;
+                }
                 roomToJoin.usersInRoomIds.Add(clientSockets[fromUser].id);
                 roomToJoin.Refresh();
             }
@@ -302,6 +308,15 @@ namespace SNetwork.Server
             {
                 rooms.Remove(roomToRemove);
             }
+        }
+
+        public void ToggleReady(Socket userId)
+        {
+            MasterNetworkPlayer player = clientSockets[userId];
+
+            player.ready = !player.ready;
+
+            Console.WriteLine("Ready toggled! " + player.ready);
         }
     }
 }

@@ -27,6 +27,8 @@ namespace SNetwork.Server
 
             ResponseManager.instance.AddServerResponse(Response51, 51);
             ResponseManager.instance.AddServerResponse(Response52, 52);
+
+            ResponseManager.instance.AddServerResponse(Response80, 80);
         }
 
         public void Response21(byte[] responseBytes, Socket fromSocket, int fromId)
@@ -83,5 +85,10 @@ namespace SNetwork.Server
             _server.CreateRoom(fromSocket);
         }
 
+        public void Response80(byte[] responseBytes, Socket fromSocket, int fromId)
+        {
+            Console.WriteLine("Recieved a 80: " + fromId + ": " + responseBytes.Length);
+            _server.ToggleReady(fromSocket);
+        }
     }
 }

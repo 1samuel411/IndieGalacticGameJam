@@ -201,4 +201,9 @@ public class MasterClientManager : MonoBehaviour
     {
         MasterMessaging.instance.SendCreateRoom(_client);
     }
+
+    public void ToggleReady()
+    {
+        MasterMessaging.instance.SendToggleReady(_client);
+    }
 }

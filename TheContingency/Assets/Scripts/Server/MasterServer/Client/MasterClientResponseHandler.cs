@@ -53,12 +53,22 @@ namespace SNetwork.Client
 
         public void Response7(byte[] responseBytes, Socket fromSocket, int fromId)
         {
+            string message = ByteParser.ConvertToASCII(responseBytes);
             Logging.CreateLog("Recieved a message: " + ByteParser.ConvertToASCII(responseBytes));
+
+            if(message == "[Full Room]")
+            {
+                UIManager.instance.FailedConnect("Full");
+            }
+
+            if(message == "[Not Exist]")
+            {
+                UIManager.instance.FailedConnect("Not Exist");
+            }
         }
 
         public void Response9(byte[] responseBytes, Socket fromSocket, int fromId)
         {
-            Logging.CreateLog("Hello: " + ByteParser.ConvertToASCII(responseBytes));
             _client.ourId = int.Parse(ByteParser.ConvertToASCII(responseBytes));
             Logging.CreateLog("Recieved the id: " + _client.ourId);
         }
@@ -71,7 +81,6 @@ namespace SNetwork.Client
         public void Response70(byte[] responseBytes, Socket fromSocket, int fromId)
         {
             _client.room = ByteParser.ConvertDataToRoom(responseBytes);
-            Logging.CreateLog("Recieved Room: " + _client.room.roomId);
         }
     }
 }
