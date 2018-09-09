@@ -122,11 +122,7 @@ namespace MasterServerProj
 
         public int GetRandNumberInterval(int min, int max, int interval)
         {
-            int symbolsToGen = rand.Next(min, max);
-
-            Random temp = new Random();
-            int velocity = temp.Next(min/5,max/5)*5;
-
+            int symbolsToGen = rand.Next(min / interval, max / interval) * interval;
 
             return symbolsToGen;
         }
