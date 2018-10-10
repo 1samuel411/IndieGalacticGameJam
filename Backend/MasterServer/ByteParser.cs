@@ -41,6 +41,10 @@ namespace SNetwork
         public static MasterNetworkPlayer ConvertToNetworkPlayer(byte[] data)
         {
             string jsonString = ConvertToASCII(data);
+            if(jsonString.EndsWith("}") == false)
+            {
+                jsonString += "}";
+            }
             return JsonConvert.DeserializeObject<MasterNetworkPlayer>(jsonString);
         }
 
@@ -71,6 +75,10 @@ namespace SNetwork
         public static KeyValuePairs ConvertDataToKeyValuePair(byte[] data)
         {
             string jsonString = ConvertToASCII(data);
+            if (jsonString.EndsWith("}") == false)
+            {
+                jsonString += "}";
+            }
             return JsonConvert.DeserializeObject<KeyValuePairs>(jsonString);
         }
 
@@ -90,21 +98,16 @@ namespace SNetwork
 
         public static ControllerInput ConvertDataToInput(byte[] data)
         {
-            string jsonString = ConvertToASCII(data);
-            string[] newString = jsonString.Split('|');
             ControllerInput input = new ControllerInput();
-            input.attitude = int.Parse(newString[0]);
-            input.speed = int.Parse(newString[1]);
-            input.pressure = int.Parse(newString[2]);
             input.set = true;
-            Console.WriteLine(jsonString);
+            input.change = BitConverter.ToInt32(data, 0);
             return input;
         }
 
         public static byte[] ConvertInputToData(ControllerInput input)
         {
-            string jsonString = input.attitude + "|" + input.speed + "|" + input.pressure;
-            return ConvertASCIIToBytes(jsonString);
+            byte[] buffer = BitConverter.GetBytes(input.change);
+            return buffer;
         }
 
         public static object[] ConvertDataToObjects(byte[] data)

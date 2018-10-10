@@ -10,7 +10,9 @@ namespace MasterServerProj
     {
 
         public DateTime endTime; // Time allowed to complete the alert
-        
+
+        public Symbol[] symbols = new Symbol[10];
+
         public Resource attitude;
         public Resource cabinPressure;
         public Resource speed;

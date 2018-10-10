@@ -102,6 +102,42 @@ namespace SNetwork.Server
                 {
                     if (rooms[i].startedGame)
                     {
+                        if (rooms[i].game.funding <= 0)
+                        {
+                            for (int x = 0; x < rooms[i].usersInRoom.Count; x++)
+                            {
+                                Socket socket = clientSockets.FirstOrDefault(p => p.Value.id == rooms[i].usersInRoom[x].id).Key;
+                                Messaging.instance.SendInfoMessage(socket, "Lost", 0);
+                            }
+                            rooms[i].usersInRoom.ForEach(x => x.ready = false);
+                            rooms[i].startedGame = false;
+                            continue;
+                        }
+
+                        if (rooms[i].usersInRoomIds.Count <= 2)
+                        {
+                            for (int x = 0; x < rooms[i].usersInRoom.Count; x++)
+                            {
+                                Socket socket = clientSockets.FirstOrDefault(p => p.Value.id == rooms[i].usersInRoom[x].id).Key;
+                                Messaging.instance.SendInfoMessage(socket, "Players", 0);
+                            }
+                            rooms[i].usersInRoom.ForEach(x => x.ready = false);
+                            rooms[i].startedGame = false;
+                            continue;
+                        }
+
+                        if (rooms[i].game.round >= 7)
+                        {
+                            for (int x = 0; x < rooms[i].usersInRoom.Count; x++)
+                            {
+                                Socket socket = clientSockets.FirstOrDefault(p => p.Value.id == rooms[i].usersInRoom[x].id).Key;
+                                Messaging.instance.SendInfoMessage(socket, "Win", 0);
+                            }
+                            rooms[i].usersInRoom.ForEach(x => x.ready = false);
+                            rooms[i].startedGame = false;
+                            continue;
+                        }
+
                         if ((rooms[i].game.funding <= 0 || DateTime.UtcNow > rooms[i].game.game.endTime) && !rooms[i].game.ended)
                         {
                             rooms[i].game.ended = true;
@@ -112,85 +148,45 @@ namespace SNetwork.Server
                             }
                         }
 
-                        if (rooms[i].game.round >= 7)
-                        {
-                            continue;
-                        }
-
-                        if (rooms[i].game.funding <= 0)
-                        {
-                            continue;
-                        }
-
                         if (rooms[i].game.ended && rooms[i].game.inputA.set == true && rooms[i].game.inputB.set == true)
                         {
                             rooms[i].game.ended = false;
-                            Console.WriteLine("Ended Room: " + rooms[i].roomId);
 
-                            Console.WriteLine("  Input A (Pressure): " + rooms[i].game.inputA.pressure);
-                            Console.WriteLine("  Input A (Speed): " + rooms[i].game.inputA.speed);
-                            Console.WriteLine("  Input A (Attitude): " + rooms[i].game.inputA.attitude);
+                            rooms[i].game.inputA.set = false;
+                            rooms[i].game.inputB.set = false;
 
-                            Console.WriteLine("  Input B (Pressure): " + rooms[i].game.inputB.pressure);
-                            Console.WriteLine("  Input B (Speed): " + rooms[i].game.inputB.speed);
-                            Console.WriteLine("  Input B (Attitude): " + rooms[i].game.inputB.attitude);
+                            Console.WriteLine("Ended Turn Room: " + rooms[i].roomId);
 
                             bool beatLast = false;
 
-                            string attitudeStr = "";
-                            for (int x = 0; x < rooms[i].game.game.attitude.symbol.Count; x++)
+                            if (rooms[i].game.game.alert.resource.name == "Cabin Pressure")
                             {
-                                attitudeStr += rooms[i].game.game.attitude.symbol[x].value;
+                                rooms[i].game.game.cabinPressure.value += rooms[i].game.inputA.change;
+                                rooms[i].game.game.cabinPressure.value += rooms[i].game.inputB.change;
+                                if (rooms[i].game.game.cabinPressure.value == rooms[i].game.game.alert.targetResourceValue)
+                                {
+                                    beatLast = true;
+                                }
                             }
-                            int attitudeVal = (int.Parse(attitudeStr));
-                            int effattitudeVal = attitudeVal;
-                            effattitudeVal += rooms[i].game.inputA.attitude + rooms[i].game.inputB.attitude;
-                            Console.WriteLine("Result Attitude: " + attitudeVal + ", needed Attitude: " + rooms[i].game.game.alert.targetResourceValue);
-
-                            string pressureStr = "";
-                            for (int x = 0; x < rooms[i].game.game.cabinPressure.symbol.Count; x++)
+                            if (rooms[i].game.game.alert.resource.name == "Speed")
                             {
-                                pressureStr += rooms[i].game.game.cabinPressure.symbol[x].value;
+                                rooms[i].game.game.speed.value += rooms[i].game.inputA.change;
+                                rooms[i].game.game.speed.value += rooms[i].game.inputB.change;
+                                if (rooms[i].game.game.speed.value == rooms[i].game.game.alert.targetResourceValue)
+                                {
+                                    beatLast = true;
+                                }
                             }
-                            int pressureVal = (int.Parse(pressureStr));
-                            int effpressureVal = pressureVal;
-                            effpressureVal += rooms[i].game.inputA.pressure + rooms[i].game.inputB.pressure;
-                            Console.WriteLine("Result Pressure: " + pressureVal + ", needed Pressure: " + rooms[i].game.game.alert.targetResourceValue);
-
-                            string speedStr = "";
-                            for (int x = 0; x < rooms[i].game.game.speed.symbol.Count; x++)
-                            {
-                                speedStr += rooms[i].game.game.speed.symbol[x].value;
-                            }
-                            int speedVal = (int.Parse(speedStr));
-                            int effspeedval = speedVal;
-                            effspeedval += rooms[i].game.inputA.speed + rooms[i].game.inputB.speed;
-                            Console.WriteLine("Result Speed: " + speedVal + ", needed Speed: " + rooms[i].game.game.alert.targetResourceValue);
-
-
                             if (rooms[i].game.game.alert.resource.name == "Attitude")
                             {
-                                if (attitudeVal == rooms[i].game.game.alert.targetResourceValue)
+                                rooms[i].game.game.attitude.value += rooms[i].game.inputA.change;
+                                rooms[i].game.game.attitude.value += rooms[i].game.inputB.change;
+                                if (rooms[i].game.game.attitude.value == rooms[i].game.game.alert.targetResourceValue)
                                 {
                                     beatLast = true;
                                 }
                             }
-                            else if (rooms[i].game.game.alert.resource.name == "Cabin Pressure")
-                            {
-                                if (pressureVal == rooms[i].game.game.alert.targetResourceValue)
-                                {
-                                    beatLast = true;
-                                }
-                            }
-                            else if (rooms[i].game.game.alert.resource.name == "Speed")
-                            {
-                                if (speedVal == rooms[i].game.game.alert.targetResourceValue)
-                                {
-                                    beatLast = true;
-                                }
-                            }
-
-                            rooms[i].game.inputA = null;
+                            rooms[i].game.inputB = null;
                             rooms[i].game.inputA = null;
 
                             Random rand = new Random();
@@ -503,6 +499,12 @@ namespace SNetwork.Server
             room.game = new GameParent();
 
             room.Refresh();
+
+            for(int i = 0; i < room.usersInRoom.Count; i++)
+            {
+                room.usersInRoom[i].commander = false;
+                room.usersInRoom[i].a = false;
+            }
 
             int randomUser = random.Next(0, 3);
 

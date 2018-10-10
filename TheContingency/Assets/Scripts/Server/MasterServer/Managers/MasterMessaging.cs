@@ -256,23 +256,21 @@ namespace SNetwork
         {
             if (!Network.IsConnected(socket)) return;
 
-            byte headerByte = (byte)header;
-            byte sendCodeByte = (byte)sendCode;
+            var headerByte = (byte)header;
+            var sendCodeByte = (byte)sendCode;
 
-            byte[] newData = new byte[data.Length + 5];
-            for (int i = 0; i < data.Length; i++)
-            {
+            var newData = new byte[data.Length + 5];
+            for (var i = 0; i < data.Length; i++)
                 newData[i + 5] = data[i];
-            }
             newData[0] = headerByte;
             newData[1] = sendCodeByte;
-            newData[2] = (byte)0;
+            newData[2] = 0;
 
             var customCodeByte = BitConverter.GetBytes(data.Length);
             newData[3] = customCodeByte[0];
             newData[4] = customCodeByte[1];
 
-            socket.BeginSend(newData, 0, newData.Length, SocketFlags.None, new AsyncCallback(SendCallback), socket);
+            socket.BeginSend(newData, 0, newData.Length, SocketFlags.None, SendCallback, socket);
         }
 
         private void SendCallback(IAsyncResult AR)

@@ -27,8 +27,8 @@ namespace MasterServerProj
             inputA = new ControllerInput();
             inputB = new ControllerInput();
 
-            // Persist
-            if (1 == 2)
+            // Persist AKA PERSIST!
+            if (newGame.attitude != null)
             {
                 newGame.attitude = game.attitude;
                 newGame.cabinPressure = game.cabinPressure;
@@ -39,17 +39,17 @@ namespace MasterServerProj
             {
                 newGame.attitude = new Resource();
                 newGame.attitude.name = "Attitude";
-                newGame.attitude.symbol = GenerateSymbols(0, 90, 5);
+                newGame.attitude.value = GetRandNumberInterval(0, 90, 5);
                 // -90-90 degrees
 
                 newGame.cabinPressure = new Resource();
                 newGame.cabinPressure.name = "Cabin Pressure";
-                newGame.cabinPressure.symbol = GenerateSymbols(10, 20, 1);
+                newGame.cabinPressure.value = GetRandNumberInterval(10, 20, 1);
                 // 10 - 20 PSI
 
                 newGame.speed = new Resource();
                 newGame.speed.name = "Speed";
-                newGame.speed.symbol = GenerateSymbols(0, 1000, 100);
+                newGame.speed.value = GetRandNumberInterval(0, 1000, 100);
                 // 0-1000 ft/s
             }
 

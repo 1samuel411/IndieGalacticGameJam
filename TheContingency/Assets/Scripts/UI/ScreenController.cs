@@ -58,9 +58,16 @@ public class ScreenController : MonoBehaviour
         if (room == null)
             return;
 
-        attitudeText.text = "Attitude (" + controllerInput.attitude + ")";
-        cabinPressureText.text = "Cabin Pressure (" + controllerInput.pressure + ")";
-        speedText.text = "Speed (" + controllerInput.speed + ")";
+        attitudeText.text = "Attitude (0)";
+        cabinPressureText.text = "Cabin Pressure (0)";
+        speedText.text = "Speed (0)";
+
+        if (room.game.game.alert.resource.name == "Attitude")
+            attitudeText.text = "Attitude (" + controllerInput.change + ")";
+        if (room.game.game.alert.resource.name == "Cabin Pressure")
+            cabinPressureText.text = "Cabin Pressure (" + controllerInput.change + ")";
+        if (room.game.game.alert.resource.name == "Speed")
+            speedText.text = "Speed (" + controllerInput.change + ")";
 
         for (int i = 0; i < room.usersInRoom.Count; i++)
         {
@@ -99,35 +106,37 @@ public class ScreenController : MonoBehaviour
 
     public void IncreaseAttitude()
     {
-        controllerInput.attitude+=5;
+        if(MasterClientManager.instance.GetRoom().game.game.alert.resource.name == "Attitude")
+            controllerInput.change+=5;
     }
 
     public void DecreaseAttitude()
     {
-        controllerInput.attitude-=5;
-
+        if(MasterClientManager.instance.GetRoom().game.game.alert.resource.name == "Attitude")
+            controllerInput.change -= 5;
     }
 
     public void IncreasePressure()
     {
-        controllerInput.pressure++;
-
+        if(MasterClientManager.instance.GetRoom().game.game.alert.resource.name == "Cabin Pressure")
+            controllerInput.change++;
     }
 
     public void DecreasePressure()
     {
-        controllerInput.pressure--;
+        if(MasterClientManager.instance.GetRoom().game.game.alert.resource.name == "Cabin Pressure")
+            controllerInput.change--;
     }
 
     public void IncreaseSpeed()
     {
-        controllerInput.speed+=100;
-
+        if(MasterClientManager.instance.GetRoom().game.game.alert.resource.name == "Speed")
+            controllerInput.change += 100;
     }
 
     public void DecreaseSpeed()
     {
-        controllerInput.speed-=100;
-
+        if(MasterClientManager.instance.GetRoom().game.game.alert.resource.name == "Speed")
+            controllerInput.change -= 100;
     }
 }

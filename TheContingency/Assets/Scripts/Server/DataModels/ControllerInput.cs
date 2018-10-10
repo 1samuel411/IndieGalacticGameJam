@@ -1,8 +1,6 @@
 ﻿[System.Serializable]
 public class ControllerInput
 {
-    public int attitude;
-    public int pressure;
-    public int speed;
-    public bool set;
+    public int change;
+    public bool set = false;
 }

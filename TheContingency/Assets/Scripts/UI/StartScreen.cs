@@ -39,11 +39,14 @@ public class StartScreen : MonoBehaviour
 
     public void ConnectToServer()
     {
-        GameObject newObj = new GameObject();
-        serverManager = newObj.AddComponent<ServerManager>();
+        if (serverManager == null)
+        {
+            GameObject newObj = new GameObject();
+            serverManager = newObj.AddComponent<ServerManager>();
+        }
 
-        serverManager.ip = ip;
-        serverManager.port = int.Parse(port);
+        serverManager.ip = "206.189.217.194";
+        serverManager.port = int.Parse("6534");
 
         serverManager.Connect(username);
     }

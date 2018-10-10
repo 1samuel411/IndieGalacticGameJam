@@ -15,6 +15,9 @@ public class UIManager : MonoBehaviour
     public WaitingScreen waitingScreen;
     public WinScreen winScreen;
 
+    public GameObject winAnimation;
+    public GameObject loseAnimation;
+
     void Awake()
     {
         instance = this;
@@ -69,6 +72,13 @@ public class UIManager : MonoBehaviour
             }
             return;
         }
+        else
+        {
+            waitingScreen.gameObject.SetActive(true);
+            screenAll.gameObject.SetActive(false);
+            screenController.gameObject.SetActive(false);
+            screenCommander.gameObject.SetActive(false);
+        }
     }
 
     public void FailedConnect(string issue)
@@ -98,6 +108,23 @@ public class UIManager : MonoBehaviour
     public void Over()
     {
         screenController.Send();
+    }
+
+    public void Win()
+    {
+        waitingScreen.gameObject.SetActive(true);
+        winAnimation.SetActive(true);
+    }
+
+    public void Lost()
+    {
+        waitingScreen.gameObject.SetActive(true);
+        loseAnimation.SetActive(true);
+    }
+
+    public void PlayerLost()
+    {
+        waitingScreen.gameObject.SetActive(true);
     }
 
 }

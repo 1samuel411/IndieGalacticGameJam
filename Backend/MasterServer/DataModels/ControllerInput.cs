@@ -8,9 +8,7 @@ namespace MasterServerProj.DataModels
     [System.Serializable]
     public class ControllerInput
     {
-        public int attitude;
-        public int pressure;
-        public int speed;
+        public int change;
         public bool set = false;
     }
 }

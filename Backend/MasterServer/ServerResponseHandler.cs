@@ -103,9 +103,8 @@ namespace SNetwork.Server
 
         public void Response88(byte[] responseBytes, Socket fromSocket, int fromId)
         {
-            Console.WriteLine("Recieved a 88: " + fromId + ": " + responseBytes.Length);
             ControllerInput input = ByteParser.ConvertDataToInput(responseBytes);
-            Console.WriteLine(input.attitude + ", " + input.pressure + ", " + input.speed);
+            Console.WriteLine("Recieved a 88: " + fromId + ": " + responseBytes.Length + "= "  + input.change);
             _server.SetInput(fromSocket, input);
         }
     }

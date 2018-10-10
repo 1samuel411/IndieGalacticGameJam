@@ -11,6 +11,7 @@ public class MainMenuButtonManager : MonoBehaviour
 
     public GameObject MainMenu;
     public GameObject creditsMenu;
+    public GameObject howToPlay;
 
     void Start()
     {
@@ -34,9 +35,10 @@ public class MainMenuButtonManager : MonoBehaviour
         StartCoroutine(MainMenuGone());
     }
 
-    public void QuitGame()
+    public void HowToPlay()
     {
-        Application.Quit();
+        anim.SetBool("closed", true);
+        StartCoroutine(HowToPlayCoroutine());
     }
 
     public void BackToMenu()
@@ -54,6 +56,17 @@ public class MainMenuButtonManager : MonoBehaviour
         StopCoroutine(MainMenuGone());
     }
 
+
+    IEnumerator HowToPlayCoroutine()
+    {
+        yield return new WaitForSeconds(1.4f);
+        MainMenu.SetActive(false);
+        creditsMenu.SetActive(false);
+        howToPlay.SetActive(true);
+        anim.SetBool("closed", false);
+        StopCoroutine(MainMenuGone());
+    }
+
     IEnumerator PlayGame()
     {
         yield return new WaitForSeconds(1.4f);
@@ -66,6 +79,7 @@ public class MainMenuButtonManager : MonoBehaviour
     {
         yield return new WaitForSeconds(1.4f);
         MainMenu.SetActive(true);
+        howToPlay.SetActive(false);
         creditsMenu.SetActive(false);
         anim.SetBool("closed", false);
         StopCoroutine(CreditsMenuGone());

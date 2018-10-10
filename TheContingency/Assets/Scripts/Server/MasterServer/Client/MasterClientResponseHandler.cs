@@ -68,9 +68,24 @@ namespace SNetwork.Client
                 UIManager.instance.FailedConnect("Not Exist");
             }
 
-            if(message.Contains("Over"))
+            if (message.Contains("Over"))
             {
                 UIManager.instance.Over();
+            }
+
+            if (message.Contains("Lost"))
+            {
+                UIManager.instance.Lost();
+            }
+
+            if (message.Contains("Win"))
+            {
+                UIManager.instance.Win();
+            }
+
+            if (message.Contains("Players"))
+            {
+                UIManager.instance.PlayerLost();
             }
         }
 

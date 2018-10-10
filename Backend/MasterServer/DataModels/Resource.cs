@@ -10,7 +10,7 @@ namespace MasterServerProj
     {
 
         public string name;
-        public List<Symbol> symbol = new List<Symbol>();
+        public int value;
 
     }
 }
